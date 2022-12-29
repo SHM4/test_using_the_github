@@ -18,11 +18,13 @@ git config --list
 git init
 초기화
 
-add .
+git add .
 해당 폴더에 있는 파일을 모두 올리겠다.
 
-add a.txt
+git add a.txt
 a.txt 파일을 올리겠다
+
+파일 내용 변경 후 업로드할 때도 add로 진행
 
 git status
 상태 확인. 파일에 어떤 내용물이 들어있는지 알려주는 것인 듯.
