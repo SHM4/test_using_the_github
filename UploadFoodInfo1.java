@@ -5,8 +5,13 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class UploadFoodInfo2 extends JFrame{
+public class UploadFoodInfo1 extends JFrame{
 	
 	String food_name;
 	String food_category;
@@ -24,10 +29,44 @@ public class UploadFoodInfo2 extends JFrame{
 	String food_metricname_list[] = {"1인분", "개", "컵", "판", "조각"};
 	// 콤보박스 구현
 	
-	UploadFoodInfo2() {
+	int food_pk = 0;
+	int highest_food_pk = 0;
+	
+/////////////////////////////////////////////////////////////
+	
+	// DB 연결
+	
+	public static Connection get() {
+		
+		Connection conn=null;
+		
+		try {
+			String url="jdbc:oracle:thin:@localhost:1521/xe";
+
+			String id="sys as sysdba";
+			// 테이블이 있는 서버의 사용자 이름
+			String pw="tjgudals";
+			// 테이블이 있는 서버의 비밀번호
+			
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
+			conn=DriverManager.getConnection(url,id,pw);
+			
+			System.out.println("데이터베이스 정상 연결");
+		}
+		catch(Exception e) {
+			System.out.println("로딩 실패");
+		}
+		
+		return conn;
+		
+	}
+	
+///////////////////////////////////////////////////////////	
+	
+	UploadFoodInfo1() throws SQLException {
 		setTitle("음식 정보 입력");
 		Container c = getContentPane();
-		setVisible(true);
 		c.setLayout(null);
 		setSize(560, 735);
 
@@ -151,10 +190,49 @@ public class UploadFoodInfo2 extends JFrame{
 		
 		c.add(jb1);
 		
+/////////////////////////////////////////////////////////////
+		// food 테이블에서 마지막 food_pk 값 추출
+
+		Connection conn = null;
+
+		PreparedStatement psmt = null;
+
+		ResultSet rs = null;
+
+		
+
+		try {
+			String que = "select food_pk from food";
+
+			conn = UploadFoodInfo1.get();
+
+			psmt = conn.prepareStatement(que);
+
+			rs = psmt.executeQuery();
+
+			while (rs.next()) {
+				highest_food_pk = rs.getInt(1);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("기존 가장 높은 food_pk: "+highest_food_pk);
+
+		rs.close();
+		psmt.close();
+		conn.close();
+		
+/////////////////////////////////////////////////////////////		
+		
+		// 확인 버튼 누르면 작동
+		
 		jb1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// food_pk = DB에서 가장 마지막 food_pk 번호+1
+				
+				food_pk = highest_food_pk+1;
 				food_name = jt1.getText();
 				food_category =  (String)food_category_combo.getSelectedItem();
 				food_metricname = (String)food_metricname_combo.getSelectedItem();
@@ -164,24 +242,68 @@ public class UploadFoodInfo2 extends JFrame{
 				food_fat = jt7.getText();
 				food_protein = jt8.getText();
 				food_sodium = jt9.getText();
+				
+/////////////////////////////////////////////////////////////	
+				
+				// Food 테이블에 값 입력
+
+				String url = "jdbc:oracle:thin:@localhost:1521/xe";
+				String que = "insert into food(food_pk,food_name,food_calorie,food_metricname,food_metricgrams,food_category,food_carb,food_fat,food_protein,food_sodium)"
+						+ "values(?,?,?,?,?,?,?,?,?,?)";
+
+				Connection con = null;
+				PreparedStatement pstmt = null;
+
+				try {
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+
+					con = DriverManager.getConnection(url, "sys as sysdba", "tjgudals");
+
+					pstmt = con.prepareStatement(que);
+
+					pstmt.setInt(1, food_pk);
+					pstmt.setString(2, food_name);
+					pstmt.setDouble(3, Double.parseDouble(food_calorie));
+					pstmt.setString(4, food_metricname);
+					pstmt.setInt(5, Integer.parseInt(food_metricgrams));
+					pstmt.setString(6, food_category);
+					pstmt.setDouble(7, Double.parseDouble(food_carb));
+					pstmt.setDouble(8, Double.parseDouble(food_fat));
+					pstmt.setDouble(9, Double.parseDouble(food_protein));
+					pstmt.setDouble(10, Double.parseDouble(food_sodium));
+
+					pstmt.executeUpdate();
+
+				}
+				catch (Exception ex) {
+				}
+////////////////////////////////////////////////////////////////				
+
+				System.out.println(food_pk);
+				System.out.println(food_name);
+				System.out.println(food_calorie);
+				System.out.println(food_metricname);
+				System.out.println(food_metricgrams);
+				System.out.println(food_category);
+				System.out.println(food_carb);
+				System.out.println(food_fat);
+				System.out.println(food_protein);
+				System.out.println(food_sodium);
+				
+				System.out.println("DB 정보 입력 완료");
+				
 			}
 		});
+		
+		setVisible(true);
+		
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		
-		new UploadFoodInfo2();
-		
+		new UploadFoodInfo1();
+
 	}
 }
-// 더 구현해야 하는 것들
-// 정보 전부 입력하면 food_pk 기존 마지막 번호 다음 번호 자동 생성 필요
-// 입력 받은 값을 DB에 입력하는 코드 필요
-// 내용 입력 안 하면 null 값으로 처리?
 
-// 제안할 부분
-// 당분 항목 추가
-
-// 더 생각해 볼 부분
-// 전부 빈 칸으로 입력할 수 없도록 음식 이름, 카테고리, 제공량은 필수 입력 사항 처리 필요
-// 정보 삭제 기능 필요. 구현한다면 기존 입력값은 삭제할 수 없도록, 또는 수정 가능도록.
+// 입출력 작동하려면 ojdbc8.jar 필요
