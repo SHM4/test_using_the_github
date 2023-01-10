@@ -1,0 +1,153 @@
+package com.APP.UserInfo;
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.EventQueue;
+import com.APP.NavBar.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import com.APP.Common.GlobalConstants;
+import com.APP.Common.JPanelSize;
+
+public class HyeongMin extends JFrame{
+
+    public HyeongMin() {
+        initialize();
+    }
+
+    private void initialize() {
+  //        initialize();
+        setTitle("Hyeong Min");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
+        setUIFont (new javax.swing.plaf.FontUIResource("굴림",Font.BOLD,12));
+  
+        // container set
+        Container container = getContentPane();
+        container.setBackground(new Color(255, 247, 225)); // HEX color #FFF7E1, Color name: Corn Silk
+  
+        // Size and layout
+        JPanelSize jPanelSize = new JPanelSize();
+        int BasicWidth, BasicHeight;
+        BasicWidth = jPanelSize.getWidth();
+        BasicHeight = jPanelSize.getHeight();
+  
+        setSize(BasicWidth,BasicHeight);
+        setLayout(new BorderLayout());
+  
+        // JPanel setting
+        JPanel mainUserInputPane = new mainUserInputPane();
+        JPanel bottomMenuPane= new bottomMenuPane(BasicWidth, BasicHeight/8);
+  
+        container.add(mainUserInputPane, BorderLayout.CENTER);
+        container.add(bottomMenuPane, BorderLayout.SOUTH);
+    }
+
+    public void setUIFont (javax.swing.plaf.FontUIResource f){
+        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get (key);
+            if (value instanceof javax.swing.plaf.FontUIResource)
+            UIManager.put (key, f);
+      }
+    }
+    // main script(super)
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    HyeongMin hyeongMin = new HyeongMin();
+                    hyeongMin.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+}
+
+class mainUserInputPane extends JPanel implements ActionListener, GlobalConstants {
+
+    JComboBox<String> UserSex;
+    JPanel[] TitleBorder;
+    JTextField[] UserInputField;
+    JButton btnSubmit;
+
+    String[] inputTitle ={"1. 음식 이름을 입력해주세요.", 
+                            "2. 음식의 카테고리(분류)를 선택해주세요.", 
+                            "3. 음식의 1회 제공량을 선택해주세요.", 
+                            "4. 1회 제공량의 분량(g)을 입력해주세요.", 
+                            "5. 1회 제공량의 칼로리 양(kcal)를 입력해주세요.", 
+                            "6. 1회 제공량의 탄수화물 양(g)을 입력해주세요.", 
+                            "7. 1회 제공량의 단백질 양(g)을 입력해주세요."};
+
+    String BtnStr = "<html><u>Calculated Calories >></u></html>";
+    public mainUserInputPane() {
+        setBackground(new Color(255, 247, 225)); // HEX color #FFF7E1, Color name: Corn Silk
+        // setOpaque(false);
+        // setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        setLayout(new GridBagLayout());
+
+        TitleBorder = new JPanel[inputTitle.length];
+        UserInputField = new JTextField[inputTitle.length];
+        for (int i=0; i<TitleBorder.length; i++) {
+            
+            TitleBorder[i] = new JPanel(new GridBagLayout());
+            TitleBorder[i].setOpaque(false); // transparent setting for background
+            TitleBorder[i].setBorder(BorderFactory.createTitledBorder(inputTitle[i]));
+            gridBagConstraints.ipadx = 400; // Size setting of JTextField using x-width
+            gridBagConstraints.ipady = 20;
+            gridBagConstraints.insets = new Insets(10,0,10,0);
+            gridBagConstraints.gridx = 0; // Grid x position
+            gridBagConstraints.gridy = i; // Grid y position
+            UserInputField[i] = new JTextField();
+            // UserInputField[i].setText(UserInputTxt.getUserInputTxtItem(i));
+            UserInputField[i].setPreferredSize(new Dimension(400,40));
+            TitleBorder[i].add(UserInputField[i]);
+            add(TitleBorder[i], gridBagConstraints);
+        }
+        
+
+    btnSubmit = new JButton("Submit");
+    btnSubmit.setBorderPainted(false); // remove border
+    btnSubmit.setContentAreaFilled(false); // remove fill
+    btnSubmit.setFocusPainted(true); // remove mouse focus
+    btnSubmit.setOpaque(false); // transparent
+    gridBagConstraints.insets = new Insets(0,0,0,0);
+    gridBagConstraints.gridx = 0; // Grid x position
+    gridBagConstraints.gridy = 11; // Grid y position
+    gridBagConstraints.anchor = GridBagConstraints.CENTER;
+    add(btnSubmit, gridBagConstraints);
+    btnSubmit.addActionListener(this);
+
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    // @Override
+    // public void actionPerformed(ActionEvent ae){
+    //     Object obj = ae.getSource();
+        
+    //     if (obj instanceof JButton){
+    //         JButton eventBtn = (JButton)obj;
+    
+    //         // if(eventBtn.equals(btnSubmit)) {
+    //             // for (int i=0; i<TitleBorder.length; i++) {
+    //             // }
+    //             // AppMain appMain = new AppMain();
+    //             // appMain.setVisible(true);
+    //             // UserInputTxt.setCaloriesGoal(Integer.parseInt(UserInputField[6].getText()));
+    //             // System.out.println(UserInputTxt.getCaloriesGoal());
+                
+    //         // } 
+    //     }
+    //   }
+}
