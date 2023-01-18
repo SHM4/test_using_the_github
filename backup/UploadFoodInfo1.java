@@ -24,17 +24,17 @@ public class UploadFoodInfo1 extends JFrame{
 	String food_sodium;
 	
 	JComboBox<String> food_category_combo;
-	String food_category_list[] = {"±¸ÀÌ·ù", "±¹ ¹× ÅÁ·ù"};
+	String food_category_list[] = {"êµ¬ì´ë¥˜", "êµ­ ë° íƒ•ë¥˜"};
 	JComboBox<String> food_metricname_combo;
-	String food_metricname_list[] = {"1ÀÎºĞ", "°³", "ÄÅ", "ÆÇ", "Á¶°¢"};
-	// ÄŞº¸¹Ú½º ±¸Çö
+	String food_metricname_list[] = {"1ì¸ë¶„", "ê°œ", "ì»µ", "íŒ", "ì¡°ê°"};
+	// ì½¤ë³´ë°•ìŠ¤ êµ¬í˜„
 	
 	int food_pk = 0;
 	int highest_food_pk = 0;
 	
 /////////////////////////////////////////////////////////////
 	
-	// DB ¿¬°á
+	// DB ì—°ê²°
 	
 	public static Connection get() {
 		
@@ -44,18 +44,18 @@ public class UploadFoodInfo1 extends JFrame{
 			String url="jdbc:oracle:thin:@localhost:1521/xe";
 
 			String id="sys as sysdba";
-			// Å×ÀÌºíÀÌ ÀÖ´Â ¼­¹öÀÇ »ç¿ëÀÚ ÀÌ¸§
+			// í…Œì´ë¸”ì´ ìˆëŠ” ì„œë²„ì˜ ì‚¬ìš©ì ì´ë¦„
 			String pw="tjgudals";
-			// Å×ÀÌºíÀÌ ÀÖ´Â ¼­¹öÀÇ ºñ¹Ğ¹øÈ£
+			// í…Œì´ë¸”ì´ ìˆëŠ” ì„œë²„ì˜ ë¹„ë°€ë²ˆí˜¸
 			
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
 			conn=DriverManager.getConnection(url,id,pw);
 			
-			System.out.println("µ¥ÀÌÅÍº£ÀÌ½º Á¤»ó ¿¬°á");
+			System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ì •ìƒ ì—°ê²°");
 		}
 		catch(Exception e) {
-			System.out.println("·Îµù ½ÇÆĞ");
+			System.out.println("ë¡œë”© ì‹¤íŒ¨");
 		}
 		
 		return conn;
@@ -65,22 +65,22 @@ public class UploadFoodInfo1 extends JFrame{
 ///////////////////////////////////////////////////////////	
 	
 	UploadFoodInfo1() throws SQLException {
-		setTitle("À½½Ä Á¤º¸ ÀÔ·Â");
+		setTitle("ìŒì‹ ì •ë³´ ì…ë ¥");
 		Container c = getContentPane();
 		c.setLayout(null);
 		setSize(560, 735);
 
 		JPanel topPane = new JPanel();
 		
-		JLabel jl1 = new JLabel("1. À½½Ä ÀÌ¸§À» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
-		JLabel jl2 = new JLabel("2. À½½ÄÀÇ Ä«Å×°í¸®(ºĞ·ù)¸¦ ¼±ÅÃÇØÁÖ¼¼¿ä.");		
-		JLabel jl3 = new JLabel("3. À½½ÄÀÇ 1È¸ Á¦°ø·®À» ¼±ÅÃÇØÁÖ¼¼¿ä.");
-		JLabel jl4 = new JLabel("4. 1È¸ Á¦°ø·®ÀÇ ºĞ·®(g)À» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
-		JLabel jl5 = new JLabel("5. 1È¸ Á¦°ø·®ÀÇ Ä®·Î¸® ¾ç(kcal)¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
-		JLabel jl6 = new JLabel("6. 1È¸ Á¦°ø·®ÀÇ Åº¼öÈ­¹° ¾ç(g)À» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
-		JLabel jl7 = new JLabel("7. 1È¸ Á¦°ø·®ÀÇ Áö¹æ ¾ç(g)À» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
-		JLabel jl8 = new JLabel("8. 1È¸ Á¦°ø·®ÀÇ ´Ü¹éÁú ¾ç(g)À» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
-		JLabel jl9 = new JLabel("9. 1È¸ Á¦°ø·®ÀÇ ³ªÆ®·ı ¾ç(mg)À» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+		JLabel jl1 = new JLabel("1. ìŒì‹ ì´ë¦„ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+		JLabel jl2 = new JLabel("2. ìŒì‹ì˜ ì¹´í…Œê³ ë¦¬(ë¶„ë¥˜)ë¥¼ ì„ íƒí•´ì£¼ì„¸ìš”.");		
+		JLabel jl3 = new JLabel("3. ìŒì‹ì˜ 1íšŒ ì œê³µëŸ‰ì„ ì„ íƒí•´ì£¼ì„¸ìš”.");
+		JLabel jl4 = new JLabel("4. 1íšŒ ì œê³µëŸ‰ì˜ ë¶„ëŸ‰(g)ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+		JLabel jl5 = new JLabel("5. 1íšŒ ì œê³µëŸ‰ì˜ ì¹¼ë¡œë¦¬ ì–‘(kcal)ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+		JLabel jl6 = new JLabel("6. 1íšŒ ì œê³µëŸ‰ì˜ íƒ„ìˆ˜í™”ë¬¼ ì–‘(g)ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+		JLabel jl7 = new JLabel("7. 1íšŒ ì œê³µëŸ‰ì˜ ì§€ë°© ì–‘(g)ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+		JLabel jl8 = new JLabel("8. 1íšŒ ì œê³µëŸ‰ì˜ ë‹¨ë°±ì§ˆ ì–‘(g)ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+		JLabel jl9 = new JLabel("9. 1íšŒ ì œê³µëŸ‰ì˜ ë‚˜íŠ¸ë¥¨ ì–‘(mg)ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 		
 		JTextArea jt1 = new JTextArea();
 		food_category_combo = new JComboBox(food_category_list);
@@ -92,9 +92,9 @@ public class UploadFoodInfo1 extends JFrame{
 		JTextArea jt8 = new JTextArea();
 		JTextArea jt9 = new JTextArea();
 		
-		JButton jb1 = new JButton("È®ÀÎ");
+		JButton jb1 = new JButton("í™•ì¸");
 		
-		Font font = new Font("±Ã¼­ º¸Åë", Font.BOLD, 20);
+		Font font = new Font("ê¶ì„œ ë³´í†µ", Font.BOLD, 20);
 		
 		jl1.setFont(font);
 		jl2.setFont(font);
@@ -119,7 +119,7 @@ public class UploadFoodInfo1 extends JFrame{
 		jb1.setFont(font);
 		
 		Color MainColor = new Color(3, 199, 90);
-		// HEX ÄÚµå #03c75a, RGB ÄÚµå 3, 199, 90
+		// HEX ì½”ë“œ #03c75a, RGB ì½”ë“œ 3, 199, 90
 
 		topPane.setBackground(MainColor);
 		
@@ -134,13 +134,13 @@ public class UploadFoodInfo1 extends JFrame{
 		jt9.setBorder(new LineBorder(MainColor, 2));
 		
 		jb1.setBorder(new LineBorder(MainColor, 2));
-		// ¹öÆ° Å×µÎ¸® »ö°ú µÎ²² ¼³Á¤
+		// ë²„íŠ¼ í…Œë‘ë¦¬ ìƒ‰ê³¼ ë‘ê»˜ ì„¤ì •
 		
 		food_category_combo.setBackground(Color.white);
 		food_metricname_combo.setBackground(Color.white);
 		
 		// jl1.setOpaque(true);
-		// JLabel¿¡ »öÀ» ³Ö±â À§ÇÑ ÄÚµå. ÀÏ´Ü ºñÈ°¼ºÈ­.
+		// JLabelì— ìƒ‰ì„ ë„£ê¸° ìœ„í•œ ì½”ë“œ. ì¼ë‹¨ ë¹„í™œì„±í™”.
 		
 		topPane.setBounds(0, 0, 560, 30);
 		
@@ -191,7 +191,7 @@ public class UploadFoodInfo1 extends JFrame{
 		c.add(jb1);
 		
 /////////////////////////////////////////////////////////////
-		// food Å×ÀÌºí¿¡¼­ ¸¶Áö¸· food_pk °ª ÃßÃâ
+		// food í…Œì´ë¸”ì—ì„œ ë§ˆì§€ë§‰ food_pk ê°’ ì¶”ì¶œ
 
 		Connection conn = null;
 
@@ -218,7 +218,7 @@ public class UploadFoodInfo1 extends JFrame{
 			e.printStackTrace();
 		}
 
-		System.out.println("±âÁ¸ °¡Àå ³ôÀº food_pk: "+highest_food_pk);
+		System.out.println("ê¸°ì¡´ ê°€ì¥ ë†’ì€ food_pk: "+highest_food_pk);
 
 		rs.close();
 		psmt.close();
@@ -226,7 +226,7 @@ public class UploadFoodInfo1 extends JFrame{
 		
 /////////////////////////////////////////////////////////////		
 		
-		// È®ÀÎ ¹öÆ° ´©¸£¸é ÀÛµ¿
+		// í™•ì¸ ë²„íŠ¼ ëˆ„ë¥´ë©´ ì‘ë™
 		
 		jb1.addActionListener(new ActionListener() {
 			@Override
@@ -245,7 +245,7 @@ public class UploadFoodInfo1 extends JFrame{
 				
 /////////////////////////////////////////////////////////////	
 				
-				// Food Å×ÀÌºí¿¡ °ª ÀÔ·Â
+				// Food í…Œì´ë¸”ì— ê°’ ì…ë ¥
 
 				String url = "jdbc:oracle:thin:@localhost:1521/xe";
 				String que = "insert into food(food_pk,food_name,food_calorie,food_metricname,food_metricgrams,food_category,food_carb,food_fat,food_protein,food_sodium)"
@@ -290,7 +290,7 @@ public class UploadFoodInfo1 extends JFrame{
 				System.out.println(food_protein);
 				System.out.println(food_sodium);
 				
-				System.out.println("DB Á¤º¸ ÀÔ·Â ¿Ï·á");
+				System.out.println("DB ì •ë³´ ì…ë ¥ ì™„ë£Œ");
 				
 			}
 		});
@@ -306,4 +306,4 @@ public class UploadFoodInfo1 extends JFrame{
 	}
 }
 
-// ÀÔÃâ·Â ÀÛµ¿ÇÏ·Á¸é ojdbc8.jar ÇÊ¿ä
+// ì…ì¶œë ¥ ì‘ë™í•˜ë ¤ë©´ ojdbc8.jar í•„ìš”
